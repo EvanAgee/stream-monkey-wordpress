@@ -43,7 +43,7 @@ class StreamMonkeyWordpress
 	public function add_scripts() {
     wp_enqueue_style( 'font-awesome', "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css", null, null);
     wp_enqueue_script( 'matchheight', "https://cdnjs.cloudflare.com/ajax/libs/jquery.matchHeight/0.7.2/jquery.matchHeight-min.js", ['jquery'], '', true );
-    wp_enqueue_script( 'streamMonkeyWordpress', plugin_dir_url( __FILE__ ) . 'assets/dist/build.js', '', '', true );
+    wp_enqueue_script('streamMonkeyWordpress', plugin_dir_url( __FILE__ ) . 'assets/dist/build.js', '', '', true );
 	}
 
 	public static function create_shortcode() {
