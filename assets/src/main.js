@@ -12,6 +12,7 @@ import router from './router'
 
 window._ = lodash
 window.axios = Axios
+window.streamMonkeySettings = streamMonkeySettings // variable is created in the DOM
 
 Vue.filter('formatDate', function(value) {
   if (value) {

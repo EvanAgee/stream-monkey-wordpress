@@ -1,11 +1,16 @@
 import * as types from '../mutations'
 
-const streamMonkeySettings = {
-  APIBase: 'https://player.streammonkey.com/feeds/channels/vkcczv2y',
-  recentMessageChannelID: 'hjrud1t4',
-  seriesChannelID: '2bbyoxfp',
-  RHTVChannelID: 'dhxbi4ay'
-}
+streamMonkeySettings.RHTVChannelID = 'dhxbi4ay'
+let APIRoot = streamMonkeySettings.streammonkey_api_base + streamMonkeySettings.streammonkey_channel_id
+
+console.log(streamMonkeySettings)
+
+// const streamMonkeySettings = {
+//   streammonkey_api_base: 'https://player.streammonkey.com/feeds/channels/vkcczv2y',
+//   recentMessageChannelID: 'hjrud1t4',
+//   seriesChannelID: '2bbyoxfp',
+//   RHTVChannelID: 'dhxbi4ay'
+// }
 
 // initial state
 const state = {
@@ -24,15 +29,15 @@ const getters = {
   channelData: state => state.channelData,
 
   recentMessages: state => state.recentMessages,
-  
+
   series: state => state.series,
-  
+
   RHTVVideos: state => state.RHTVMessages,
-  
+
   getVideo: state => (videoID) => {
     if ( !_.isEmpty(state.recentMessages) ) {
       let video = _.find(state.recentMessages, { 'id': videoID })
-      
+
       _.each(state.series, series => {
         if ( _.find(series.videos, { id: videoID }) ) {
           video.series = series
@@ -41,7 +46,7 @@ const getters = {
       })
 
       return video
-    } 
+    }
     return false
   },
 
@@ -55,12 +60,12 @@ const getters = {
 // actions
 const actions = {
   getStreamMonkeyData({commit, dispatch, getters}) {
-    axios.get(streamMonkeySettings.APIBase)
+    axios.get(APIRoot)
       .then(function (response) {
         commit(types.STORE_FETCHED_DATA, response.data)
         commit(types.UPDATE_LOADED_DATA, { key: "baseDataLoaded", value: true })
 
-        let series = _.first(response.data.categories.filter(cat => cat.id === streamMonkeySettings.seriesChannelID)).playlists
+        let series = _.first(response.data.categories.filter(cat => cat.id === streamMonkeySettings.streammonkey_series_id)).playlists
 
         _.each(series, s => {
           dispatch('getSeriesData', s.id)
@@ -72,7 +77,7 @@ const actions = {
   },
 
   getRecentMessages({ commit }) {
-    axios.get(streamMonkeySettings.APIBase + '/' + streamMonkeySettings.recentMessageChannelID)
+    axios.get(APIRoot + '/' + streamMonkeySettings.streammonkey_recent_messages_id)
       .then(function (response) {
         commit(types.STORE_RECENT_MESSAGES, response.data.videos)
         commit(types.UPDATE_LOADED_DATA, { key: "recentMessageDataLoaded", value: true })
@@ -83,7 +88,7 @@ const actions = {
   },
 
   getRHTVVideos({ commit }) {
-    axios.get(streamMonkeySettings.APIBase + '/' + streamMonkeySettings.RHTVChannelID)
+    axios.get(APIRoot + '/' + streamMonkeySettings.RHTVChannelID)
       .then(function (response) {
         commit(types.STORE_RHTV_MESSAGES, response.data.videos)
         commit(types.UPDATE_LOADED_DATA, { key: "rhtvDataLoaded", value: true })
@@ -98,8 +103,7 @@ const actions = {
   },
 
   getSeriesData({commit}, seriesID) {
-    // https://player.streammonkey.com/feeds/channels/vkcczv2y/jf3cicqb
-    axios.get(streamMonkeySettings.APIBase + '/' + seriesID)
+    axios.get(APIRoot + '/' + seriesID)
     .then(function (response) {
       commit(types.STORE_SERIES_DATA, response.data)
       // commit(types.UPDATE_LOADED_DATA, { key: "rhtvDataLoaded", value: true })
