@@ -1,26 +1,14 @@
 import * as types from '../mutations'
 
-streamMonkeySettings.RHTVChannelID = 'dhxbi4ay'
 let APIRoot = streamMonkeySettings.streammonkey_api_base + streamMonkeySettings.streammonkey_channel_id
-
-console.log(streamMonkeySettings)
-
-// const streamMonkeySettings = {
-//   streammonkey_api_base: 'https://player.streammonkey.com/feeds/channels/vkcczv2y',
-//   recentMessageChannelID: 'hjrud1t4',
-//   seriesChannelID: '2bbyoxfp',
-//   RHTVChannelID: 'dhxbi4ay'
-// }
 
 // initial state
 const state = {
   loaded: false,
   baseDataLoaded: false,
   recentMessageDataLoaded: false,
-  rhtvDataLoaded: false,
   channelData: false,
   recentMessages: [],
-  RHTVMessages: [],
   series: []
 }
 
@@ -31,8 +19,6 @@ const getters = {
   recentMessages: state => state.recentMessages,
 
   series: state => state.series,
-
-  RHTVVideos: state => state.RHTVMessages,
 
   getVideo: state => (videoID) => {
     if ( !_.isEmpty(state.recentMessages) ) {
@@ -87,26 +73,10 @@ const actions = {
       });
   },
 
-  getRHTVVideos({ commit }) {
-    axios.get(APIRoot + '/' + streamMonkeySettings.RHTVChannelID)
-      .then(function (response) {
-        commit(types.STORE_RHTV_MESSAGES, response.data.videos)
-        commit(types.UPDATE_LOADED_DATA, { key: "rhtvDataLoaded", value: true })
-      })
-      .catch(function (error) {
-        console.log(error)
-      });
-  },
-
-  getPlaylistData({ commit, dispatch }, playlistID) {
-    console.log(playlistID)
-  },
-
   getSeriesData({commit}, seriesID) {
     axios.get(APIRoot + '/' + seriesID)
     .then(function (response) {
       commit(types.STORE_SERIES_DATA, response.data)
-      // commit(types.UPDATE_LOADED_DATA, { key: "rhtvDataLoaded", value: true })
     })
     .catch(function (error) {
       console.log(error)
@@ -122,10 +92,6 @@ const mutations = {
 
   [types.STORE_RECENT_MESSAGES](state, payload) {
     state.recentMessages = payload
-  },
-
-  [types.STORE_RHTV_MESSAGES](state, payload) {
-    state.RHTVMessages = payload
   },
 
   [types.UPDATE_LOADED_DATA](state, payload) {

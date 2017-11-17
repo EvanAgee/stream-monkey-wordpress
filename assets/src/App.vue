@@ -20,15 +20,13 @@ export default {
     ...mapActions([
       'getStreamMonkeyData',
       'getPlaylistData',
-      'getRecentMessages',
-      'getRHTVVideos'
+      'getRecentMessages'
     ]),
   },
 
   mounted() {
     this.getStreamMonkeyData()
     this.getRecentMessages()
-    this.getRHTVVideos()
   }
 }
 </script>

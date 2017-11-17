@@ -20,14 +20,6 @@
         </slick>
       </div>
 
-      <div class="sermon-center--section">
-        <h3 class="sermon-center--section--header">RHTV</h3>
-        <slick class="slick-rhtv" v-if="RHTVVideos.length > 0" ref="slick-rhtv" :options="slickOptions">
-          <div v-for="video in RHTVVideos">
-            <card :src="video" type="video"></card>
-          </div>
-        </slick>
-      </div>
     </div>
     <div v-else>Loading...</div>
   </div>
@@ -50,23 +42,20 @@ export default {
     ...mapGetters([
       'channelData',
       'recentMessages',
-      'series',
-      'RHTVVideos'
+      'series'
     ])
   },
 
   methods: {
     ...mapActions([
       'getStreamMonkeyData',
-      'getRecentMessages',
-      'getRHTVVideos'
+      'getRecentMessages'
     ])
   },
 
   mounted() {
     this.getStreamMonkeyData()
     this.getRecentMessages()
-    this.getRHTVVideos()
   },
 
   watch: {
@@ -79,9 +68,9 @@ export default {
     }
   },
 
-  components: { 
+  components: {
     Slick,
-    Card 
+    Card
   }
 }
 </script>
