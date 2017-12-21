@@ -13,7 +13,7 @@
 
       <div class="sermon-center--section">
         <h3 class="sermon-center--section--header">Series</h3>
-        <slick class="slick-series" v-if="series.length > 0" ref="slick-series" :options="slickOptions">
+        <slick class="slick-series" v-if="series.length > 0" ref="slick-series" :options="slickOptionsSeries">
           <div v-for="s in series">
             <card :src="s" type="series"></card>
           </div>
@@ -55,6 +55,7 @@ export default {
     reInit() {
       // Helpful if you have to deal with v-for to update dynamic lists
       this.$nextTick(() => {
+        this.equalizeCards()
         this.$refs.slick.reSlick()
       });
     },
