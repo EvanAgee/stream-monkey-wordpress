@@ -50,21 +50,38 @@ export default {
     ...mapActions([
       'getStreamMonkeyData',
       'getRecentMessages'
-    ])
+    ]),
+
+    reInit() {
+      // Helpful if you have to deal with v-for to update dynamic lists
+      this.$nextTick(() => {
+        this.$refs.slick.reSlick()
+      });
+    },
   },
 
   mounted() {
     this.getStreamMonkeyData()
     this.getRecentMessages()
+    let self = this
+    window.onload = function(){
+      setTimeout(self.reInit, 500)
+    }
   },
 
   watch: {
     recentMessages(val) {
-      if ( val.length > 0 ) this.equalizeCards()
+      if ( val.length > 0 ) {
+        this.equalizeCards()
+        this.$refs.slick.reSlick()
+      }
     },
 
     series(val) {
-      if ( val.length > 0 ) this.equalizeCards()
+      if ( val.length > 0 ) {
+        this.equalizeCards()
+        this.$refs.slick.reSlick()
+      }
     }
   },
 
